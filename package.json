@@ -1,6 +1,6 @@
 {
   "name": "webpagetoccode",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Converts an output folder containing a website to C-Code. Creates a header- and a source file, which can be simply included into projects",
   "main": "cli.js",
   "author": "Alexander Fellmett",
@@ -10,7 +10,12 @@
     "type": "git",
     "url": "https://github.com/AFellmett/WebPageToCCode"
   },
-  "keywords": ["website", "cpp", "header", "arduino"],
+  "keywords": [
+    "website",
+    "cpp",
+    "header",
+    "arduino"
+  ],
   "bin": "./cli.js",
   "dependencies": {
     "mime": "^2.5.2"

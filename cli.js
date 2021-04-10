@@ -6,7 +6,7 @@ const mime = require('mime');
 const[,, ... [source, target]] = process.argv
 
 const headerFileName = `website.h`;
-const template_header = `template/${headerFileName}`;
+const template_header = `${__dirname}/template/${headerFileName}`;
 const sourceFileName = `website.cpp`;
 const linebreak = `\r\n`;
 
