@@ -5,9 +5,13 @@
   "main": "cli.js",
   "author": "Alexander Fellmett",
   "license": "ISC",
-  "bin": {
-    "webpagetoccode": "./cli.js"
+  "homepage": "https://github.com/AFellmett/WebPageToCCode",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AFellmett/WebPageToCCode"
   },
+  "keywords": ["website", "cpp", "header", "arduino"],
+  "bin": "./cli.js",
   "dependencies": {
     "mime": "^2.5.2"
   }
