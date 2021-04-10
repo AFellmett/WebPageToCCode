@@ -100,10 +100,8 @@ async function main(source, target = `lib`) {
     await fs.promises.copyFile(template_header,`${target}/${headerFileName}`);
     
     files = await getFiles(source); 
-    console.log(sourceFileName);
     const sourceFile = fs.createWriteStream(`${target}/${sourceFileName}`);
     await writeHeader(sourceFile);
-    console.log(files);
     files = files.map(file => {
       if(!file.endsWith(`.gz`)){
         if(files.includes(`${file}.gz`))
