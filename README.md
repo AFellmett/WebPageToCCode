@@ -1,4 +1,8 @@
 # WebPageToCCode
+[![npm][1]][2]
+
+[1]: https://img.shields.io/npm/v/webpagetoccode?style=flat-square
+[2]: https://www.npmjs.com/package/webpagetoccode
 
 ## TLDR;
 A tool for generating C-Code out of a website to be used to compile it into ESP8266 or ESP32 based projects.
@@ -16,18 +20,18 @@ The main goal is to split and automate the process of creating a modern website 
 
 ### Install
 
+To use it within your package.json as script, just install it as DevDependency
 ```bash
-npm install -D webpagetoccode
+  npm install -D webpagetoccode
+```
+
+If you plan to use it as a general tool of choice it is recommended to install it globally
+```bash
+  npm install -g webpagetoccode
 ```
 
 ### Usage 
-To use it via command line simply put 
-
-```bash
-webpagetoccode <sourcefolder> <targetfolder> 
-```
-
-It can also be used within the package.json as postbuild command.
+To use it as script inside your `package.json`.
 
 For example within an React Project:
 
@@ -39,6 +43,11 @@ For example within an React Project:
     "eject": "react-scripts eject",
     "postbuild": "precompress -t gz -i html,js,json,css,txt build && webpagetoccode build ../target"
   }
+```
+Or to use it as generall tool simply put 
+
+```bash
+Usage: webpagetoccode <sourceFolder> <targetFolder>
 ```
 
 ---
