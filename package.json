@@ -16,6 +16,9 @@
     "header",
     "arduino"
   ],
+  "scripts" : {
+    "eslint": "eslint ./cli.js"
+  },
   "bin": "./cli.js",
   "dependencies": {
     "mime": "^2.5.2"
