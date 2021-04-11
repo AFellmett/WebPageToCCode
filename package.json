@@ -19,5 +19,9 @@
   "bin": "./cli.js",
   "dependencies": {
     "mime": "^2.5.2"
+  },
+  "devDependencies": {
+    "eslint": "^7.24.0",
+    "eslint-config-google": "^0.14.0"
   }
 }
