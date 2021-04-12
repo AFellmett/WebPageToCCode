@@ -6,11 +6,37 @@
  */
 const fs = require(`fs`);
 const mime = require('mime');
+const yargs = require('yargs');
 
 /**
- * Map process args
+ * Configure CLI Options
  */
-const [,, ...[source, target]] = process.argv;
+const argv = yargs
+    .option('source', {
+      alias: 's',
+      description: 'Sets the root directory containing the website.',
+      type: 'string',
+    })
+    .option('target', {
+      alias: 't',
+      description: 'Sets the target directory where the output is generated.',
+      type: 'string',
+      default: 'lib',
+    })
+    .demandOption(['source'])
+    .check((argv) => {
+      // Check if the source folder exists.
+      // That's the minimal requirement to run this tool.
+      if (fs.existsSync(argv.source)) {
+        return true;
+      }
+      throw new Error(`Directory '${argv.source}' does not exists.`);
+    })
+    .strict()
+    .showHelpOnFail(true)
+    .help()
+    .alias('help', 'h')
+    .argv;
 
 /**
  * Constants used
@@ -31,15 +57,15 @@ const includeHeader = `#include "${headerFileName}"\n\n`;
  * are located next to non compressed files.
  * It uses the uncompressed mimetype and select the compressed file.
  *
- * @param {string} source Sourcefolder containg the website
+ * @param {string} source Sourcedirectory containg the website
  * @return {[{file: string, mime: string}]} an array of objects containing
  *            the filename and mimetype as string
  */
 async function getFiles(source) {
   if (source == null) return;
   const files = [];
-  // get all files inside the source folder,
-  // but filter those which are also in compressed foramt inside the same folder
+  // get all files inside the source directory,
+  // but filter those which are also in compressed foramt inside the same directory
   const allFilesOfDirectory = (await fs.promises.readdir(source)).filter(
       (item, pos, arr) => item.endsWith(`.gz`) || !arr.includes(`${item}.gz`));
   for (const file of allFilesOfDirectory) {
@@ -48,9 +74,9 @@ async function getFiles(source) {
     if (stats.isDirectory()) {
       // If it's a directory get all files out of the directory
       // but prefix the files with the directoryname
-      const subFolder = await getFiles(`${source}/${file}`);
-      subFolder.forEach((value) => value.file = `${file}/${value.file}`);
-      files.push(...subFolder);
+      const subDir = await getFiles(`${source}/${file}`);
+      subDir.forEach((value) => value.file = `${file}/${value.file}`);
+      files.push(...subDir);
     } else {
       // If it's just a file get the mime type and add it to the file list
       if (file.endsWith(`.gz`)) {
@@ -88,15 +114,15 @@ function formatName(fileName) {
  *  containing all bytes of a given file
  *
  * @param {fs.WriteStream} fileHandle fileHandle to write the content
- * @param {string} rootFolder is representing the root folder
+ * @param {string} rootDir is representing the root directory
  * which contains the files
  * @param {string} fileName the name of the file to transform into char array
  */
-async function writeFileData(fileHandle, rootFolder, fileName) {
-  if (fileHandle == null || rootFolder == null || fileName == null) return;
+async function writeFileData(fileHandle, rootDir, fileName) {
+  if (fileHandle == null || rootDir == null || fileName == null) return;
 
   const name = formatName(fileName);
-  const data = await fs.promises.readFile(`${rootFolder}/${fileName}`);
+  const data = await fs.promises.readFile(`${rootDir}/${fileName}`);
   const length = data.length;
 
   // adding a seperate const with the length of the array helps
@@ -164,50 +190,46 @@ function writeRegisterFunction(fileHandle, fileNames) {
  *       But there is no need for, the compiler itself can easily
  *       optimize it and it remains readable.
  *
- * @param {string} sourceFolder Source directory, where the Webfiles are located
- * @param {string} targetFolder Target directory,
+ * @param {string} sourceDir Source directory, where the Webfiles are located
+ * @param {string} targetDir Target directory,
  * where the C Files are going to be placed
  * @return {number} return code: 0 - everything went well;
  *  everything else is the js specific errorCode
  */
-async function main(sourceFolder, targetFolder = `lib`) {
-  if (sourceFolder == null || !fs.existsSync(sourceFolder)) {
-    console.log();
-    console.log(`\tUsage: webpagetoccode <sourceFolder> <targetFolder>`);
-    console.log();
-    return;
-  }
+async function main(sourceDir, targetDir) {
+  if (sourceDir == null || !fs.existsSync(sourceDir)) return;
+
   let returnCode = 0;
-  // Check if the folder exists or if it can be created
+  // Check if the directory exists or if it can be created
   try {
-    if (!fs.existsSync(targetFolder)) {
-      await fs.promises.mkdir(targetFolder);
+    if (!fs.existsSync(targetDir)) {
+      await fs.promises.mkdir(targetDir);
     }
   } catch (error) {
-    console.error(`'${targetFolder}' seems to be unusable.`, error);
+    console.error(`'${targetDir}' seems to be unusable.`, error);
     return -1;
   }
-  // sourceFolder and targetFolder exists -> do the work
+  // sourceDirectory and targetDirectory exists -> do the work
   try {
     // Copy the Header file to the output directory
     // The header file does not contain any content specific information
     // therefore we can just copy the template
     await fs.promises.copyFile(templateHeader,
-        `${targetFolder}/${headerFileName}`);
+        `${targetDir}/${headerFileName}`);
 
-    // Get a list of all files which are inside the sourceFolder
-    const files = await getFiles(sourceFolder);
+    // Get a list of all files which are inside the sourceDirectory
+    const files = await getFiles(sourceDir);
 
     // Create and open a c source file
     const sourceFile =
-      fs.createWriteStream(`${targetFolder}/${sourceFileName}`);
+      fs.createWriteStream(`${targetDir}/${sourceFileName}`);
     // Write the static information
     // like warning of autogenerated content and include the header file
     writeHeader(sourceFile);
 
     // Create a char array constant out of all files
     for (const file of files) {
-      await writeFileData(sourceFile, sourceFolder, file.file);
+      await writeFileData(sourceFile, sourceDir, file.file);
     }
     // Create a function for each file to serve the matching char array
     for (const file of files) {
@@ -230,4 +252,4 @@ async function main(sourceFolder, targetFolder = `lib`) {
 /**
  * Execute main with given parameters
  */
-main(source?.toString(), target?.toString());
+main(argv.source, argv.target);

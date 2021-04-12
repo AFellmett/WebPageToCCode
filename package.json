@@ -21,7 +21,8 @@
   },
   "bin": "./cli.js",
   "dependencies": {
-    "mime": "^2.5.2"
+    "mime": "^2.5.2",
+    "yargs": "^16.2.0"
   },
   "devDependencies": {
     "eslint": "^7.24.0",
