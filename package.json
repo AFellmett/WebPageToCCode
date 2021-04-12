@@ -16,6 +16,10 @@
     "header",
     "arduino"
   ],
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "engineStrict": true,
   "scripts": {
     "eslint": "eslint ./cli.js"
   },
