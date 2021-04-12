@@ -9,7 +9,8 @@ A tool for generating C-Code out of a website to be used to compile it into ESP8
 
 ## What does it do?
 
-This tool can take an output folder of a modern webframework like Angular or React and recursivly map all files into a C header and source file.
+This tool can take an output directory of a modern webframework like Angular or React and recursivly map all files into a C header and source file.
+Both files are human readable formatted and contain an copyright string on top.
 Afterwords it uses the popular Arduino Webserver library to register all files by it's file positions and create a callback functions for it.
 
 ## Why the project is useful?
@@ -41,13 +42,27 @@ For example within an React Project:
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "postbuild": "precompress -t gz -i html,js,json,css,txt build && webpagetoccode build ../target"
+    "postbuild": "precompress -t gz -i html,js,json,css,txt build && webpagetoccode -s build -t ../target"
   }
 ```
 Or to use it as generall tool simply put 
 
-```bash
-Usage: webpagetoccode <sourceFolder> <targetFolder>
+```
+> webpagetoccode -h
+
+Options:
+      --version  Show the package version                               [boolean]
+  -s, --source   Sets the root directory containing the website.
+                                                              [string] [required]
+  -t, --target   Sets the target directory where the output is generated.       
+                                                        [string] [default: "lib"]
+  -a, --author   Adds the author to the source code files as requierd by cpplint.
+                                                    [string] [default: "unknown"]
+  -h, --help     Show this message                                      [boolean]
+```
+The minimal usage is as follows
+```
+webpagetoccode --source <RootDirectory>
 ```
 
 ---
@@ -85,7 +100,7 @@ void loop(){
 ---
 **NOTE**
 
-If the tool finds an `index.html` file in your root folder, it automatically addes a default route `"/"` to serve this file. 
+If the tool finds an `index.html` file in your root directory, it automatically addes a default route `"/"` to serve this file. 
 
 Regardless if it`s a compressed file or not.
 

@@ -1,6 +1,6 @@
 {
   "name": "webpagetoccode",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Converts an output folder containing a website to C-Code. Creates a header- and a source file, which can be simply included into projects",
   "main": "cli.js",
   "author": "Alexander Fellmett",
