@@ -5,6 +5,7 @@
   "main": "cli.js",
   "author": "Alexander Fellmett",
   "license": "ISC",
+  "type": "module",
   "homepage": "https://github.com/AFellmett/WebPageToCCode",
   "repository": {
     "type": "git",
