@@ -5,6 +5,7 @@
   "main": "cli.js",
   "author": "Alexander Fellmett",
   "license": "ISC",
+  "type": "module",
   "homepage": "https://github.com/AFellmett/WebPageToCCode",
   "repository": {
     "type": "git",
@@ -16,12 +17,17 @@
     "header",
     "arduino"
   ],
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "engineStrict": true,
   "scripts": {
     "eslint": "eslint ./cli.js"
   },
   "bin": "./cli.js",
   "dependencies": {
-    "mime": "^2.5.2"
+    "mime": "^2.5.2",
+    "yargs": "^16.2.0"
   },
   "devDependencies": {
     "eslint": "^7.24.0",
