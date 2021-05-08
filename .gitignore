@@ -3,3 +3,6 @@
 
 # Build ouput
 /build
+
+# IDE specific
+.vscode
