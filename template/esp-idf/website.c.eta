@@ -40,14 +40,14 @@ esp_err_t website_content_handler(httpd_req_t *req)
 }
 
 <% for (const file of it.files) { %>
-static const char <%= it.formatName(file.file) %>[] PROGMEM = {
+static const char <%= it.formatName(file.file) %>[] = {
 <%~ await includeFile("../byteArray", {content: await it.getContent(file.file)}) %>
 
 };
 
 <% } %>
 <% for (const file of it.files) { %>
-static const struct web_content st_ <%_ = it.formatName(file.file) %> = {
+static struct web_content st_ <%_ = it.formatName(file.file) %> = {
   .length = sizeof(<%= it.formatName(file.file) %>),
   .data = <%= it.formatName(file.file) %>,
   .compression = <%= file.file.endsWith('gz').toString() %>,
@@ -74,7 +74,7 @@ static const httpd_uri_t fallback_page = {
 <% } -%>
 void registerWebsite(httpd_handle_t server) {
 <% for (const file of it.files) { %>
-  httpd_register_uri_handler(server, & <%_ = it.formatName(file.file) _%> );
+  httpd_register_uri_handler(server, & <%_ = it.formatName(file.file) _%> Page);
 <% } %>
 }
 
