@@ -1,4 +1,5 @@
 <% it.content.forEach((byte, idx, array) => { %>
 0x<%_ = byte.toString(16).padStart(2, "0") %> 
-<%_ = (idx + 1) % 13 == 0 ? '\r\n' : idx < array.length ? ', ' : '' %>
+<%_ = (idx + 1) < array.length ? ', ' : '' %>
+<%_ = (idx + 1) % 13 == 0 ? '\n' : ''%>
 <% })%>

@@ -1,5 +1,6 @@
 <%~ await includeFile("../copyright", it) %>
 
+
 #pragma once
 
 /*
@@ -14,4 +15,4 @@
  * Note:
  * index.html will also be registered as root element
  */
-void registerWebsite(Webserver& server);
+void registerWebsite(WebServer& server);

@@ -1,27 +1,32 @@
 <%~ await includeFile("../copyright", it) %>
 
+
 #include "website.h"
+
+static WebServer* _server = nullptr;
 
 <% for (const file of it.files) { %>
 static const char <%= it.formatName(file.file) %>[] PROGMEM = {
 <%~ await includeFile("../byteArray", {content: await it.getContent(file.file)}) %>
+
 };
 
 <% } %>
 <% for (const file of it.files) { %>
-static void <%= it.formatName(file.file) %> Page() {
-<% if (file.file.endsWith('gz')) { %>
-  server.sendHeader("Content-Encoding", "gzip");
+static void <%= it.formatName(file.file) _%> Page() {
+<% if (file.file.toLowerCase().endsWith('gz')) { %>
+  _server->sendHeader("Content-Encoding", "gzip");
 <% } %>
-  server.send_P(200, "<%= file.mime %>", <%= it.formatName(file.file) %>, sizeof(<%= it.formatName(file.file) %>));
+  _server->send_P(200, "<%= file.mime %>", <%= it.formatName(file.file) %>, sizeof(<%= it.formatName(file.file) %>));
 }
-<% } %>
 
-void registerWebsite() {
+<% } %>
+void registerWebsite(WebServer& server) {
+  _server = &server;
 <% for (const file of it.files) { %>
-  server.on("/ <%_ = file.file %>", <%= it.formatName(file.file) _%> Page);
+  _server->on("/ <%_ = file.file %>", <%= it.formatName(file.file) _%> Page);
 <% if (file.file.toLowerCase().startsWith('index.html')) { %>
-  server.on("/", <%= it.formatName(file.file) %> Page);
+  _server->on("/", <%= it.formatName(file.file) _%> Page);
 <% } %>
 <% } %>
 }
