@@ -1,0 +1,17 @@
+<%~ await includeFile("../copyright", it) %>
+
+#pragma once
+
+/*
+ * Include the WebServer library
+ */
+#include <WebServer.h>
+
+/*
+ * Registers all files corresponding
+ * to their path and serves the content.
+ *
+ * Note:
+ * index.html will also be registered as root element
+ */
+void registerWebsite(Webserver& server);

@@ -26,6 +26,8 @@
   },
   "bin": "./cli.js",
   "dependencies": {
+    "@types/node": "^16.11.7",
+    "eta": "^1.12.3",
     "mime": "^2.5.2",
     "yargs": "^16.2.0"
   },
