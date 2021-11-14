@@ -24,7 +24,7 @@ static void <%= it.formatName(file.file) _%> Page() {
 void registerWebsite(WebServer& server) {
   _server = &server;
 <% for (const file of it.files) { %>
-  _server->on("/ <%_ = file.file %>", <%= it.formatName(file.file) _%> Page);
+  _server->on("/ <%_ = file.file.toLowerCase().endsWith('.gz') ? file.file.slice(0,-3) : file.file %>", <%= it.formatName(file.file) _%> Page);
 <% if (file.file.toLowerCase().startsWith('index.html')) { %>
   _server->on("/", <%= it.formatName(file.file) _%> Page);
 <% } %>

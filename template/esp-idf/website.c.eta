@@ -55,7 +55,7 @@ static struct web_content st_ <%_ = it.formatName(file.file) %> = {
 };
 
 static const httpd_uri_t <%= it.formatName(file.file) _%> Page = {
-  .uri       = "/<%= file.file %>",
+  .uri       = "/<%= file.file.toLowerCase().endsWith('.gz') ? file.file.slice(0,-3) : file.file %>",
   .method    = HTTP_GET,
   .handler   = website_content_handler,
   .user_ctx  = &st_ <%_ = it.formatName(file.file) %>
